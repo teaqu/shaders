@@ -1,0 +1,3 @@
+[submodule "KodeLife-Shaders"]
+	path = KodeLife-Shaders
+	url = https://github.com/teaqu/KodeLife-Shaders.git
