@@ -3,11 +3,11 @@
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec3 camera;
+    vec4 camera;
     if (iFrame == 1) {
-       camera = vec3(0);
+       camera = vec4(0);
     } else {
-        camera = texture(iChannel0, vec2(vec2(0, 0))).rgb;
+        camera = texture(iChannel0, vec2(vec2(0, 0)));
     }
 
     if (isKeyDown(Key_A)) {
@@ -18,11 +18,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     if (isKeyDown(Key_S)) {
-        camera.y -= 1.0;
+        camera.z -= 1.0;
     }
     if (isKeyDown(Key_W)) {
-        camera.y += 1.0;
+        camera.z += 1.0;
+    }
+
+    if (isKeyDown(Key_UpArrow)) {
+       camera.y += 1.0; 
+    }
+    if (isKeyDown(Key_DownArrow)) {
+       camera.y -= 1.0; 
+    }
+
+    if (isKeyDown(Key_LeftArrow)) {
+       camera.w += 1.0; 
+    }
+    if (isKeyDown(Key_RightArrow)) {
+       camera.w -= 1.0; 
     }
     
-    fragColor = vec4(camera, 1.0);
+    fragColor = camera;
 }
