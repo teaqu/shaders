@@ -1,6 +1,8 @@
 # Shadertoy Shaders
 
-Currently using the Shader Toy Extension that emulates the website
+Currently using the Shader Toy VSCode Extension that emulates the website.
+
+https://github.com/stevensona/shader-toy
 
 Uniforms At the moment, iResolution, iGlobalTime (also as iTime), iTimeDelta,
 iFrame, iMouse, iMouseButton, iDate, iSampleRate, iChannelN with N in [0, 9] and
