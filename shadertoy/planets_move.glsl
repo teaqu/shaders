@@ -3,6 +3,9 @@
 
 const float SPEED = 0.05;
 
+vec3 forward = vec3(0.0, 0.0, -1.0);
+vec3 up = vec3(0.0, 1.0, 0.0);
+
 mat2 rot2D(float angle) {
     float s = sin(angle);
     float c = cos(angle);
@@ -46,20 +49,13 @@ vec3 direction() {
     }
 
     if (isKeyDown(Key_LeftArrow)) {
-        direction.xz *= rot2D(direction.z * SPEED);
+        forward.yz *= rot2D(SPEED);
     }
     if (isKeyDown(Key_RightArrow)) {
-        direction.xz *= rot2D(-direction.z * SPEED);
+        forward.yz *= rot2D(SPEED);
     }
 
-    // if (isKeyDown(Key_UpArrow)) {
-    //      camera.yz *= rot2D(camera.w * SPEED);
-    // }
-    // if (isKeyDown(Key_DownArrow)) {
-    //     camera.yz *= rot2D(-camera.w * SPEED);
-    // }
-
-    return direction;
+    return direction * forward;
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
