@@ -11,6 +11,8 @@ layout(std430, binding = 1) buffer DataBuffer2 {
 
 uniform sampler2D uKeyboard;
 
+uniform vec2 uMousePosition;
+
 bool isKeyDown(int key) {
 	return texelFetch(uKeyboard, ivec2(key, 0), 0).x == 1.0;
 }
@@ -34,34 +36,31 @@ vec3 keyboard() {
 	if (camera == vec3(1.0)) {
 		 camera = vec3(0, 0, -6);
 	}
-
-    if (isKeyDown(KEY_A)) {
+	
+	if (uMousePosition.x > 0 && uMousePosition.y > 0 && uMousePosition.x < 1 && uMousePosition.y < 1) {
+		 if (isKeyDown(KEY_A)) {
         camera.x -= SPEED;
-    } 
-    if (isKeyDown(KEY_D)) {
-        camera.x += SPEED;
-    }
-
-    if (isKeyDown(KEY_W)) {
-        camera.z += SPEED;
-    }
-    if (isKeyDown(KEY_S)) {
-        camera.z -= SPEED;
-    }
-
-    if (isKeyDown(KEY_E)) {
-       camera.y += SPEED;
-    }
-    
-    if (isKeyDown(KEY_Q)) {
-        camera.y -= SPEED;
-    }
-    
-    if (isKeyDown(KEY_CTRL) && isKeyDown(KEY_RETURN)) {
-    	// Need to find a way to only check once...
-    	canInput++;
-    }
-
+	    } 
+	    if (isKeyDown(KEY_D)) {
+	        camera.x += SPEED;
+	    }
+	
+	    if (isKeyDown(KEY_W)) {
+	        camera.z += SPEED;
+	    }
+	    if (isKeyDown(KEY_S)) {
+	        camera.z -= SPEED;
+	    }
+	
+	    if (isKeyDown(KEY_E)) {
+	       camera.y += SPEED;
+	    }
+	    
+	    if (isKeyDown(KEY_Q)) {
+	        camera.y -= SPEED;
+	    }
+	}
+   //
     return camera;
 }
 

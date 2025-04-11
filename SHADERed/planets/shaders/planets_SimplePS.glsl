@@ -1,6 +1,5 @@
 #version 440
 
-
 layout(std430, binding = 0) buffer DataBuffer {
     vec3 data;
 };

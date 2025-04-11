@@ -29,6 +29,9 @@
 		<pass name="Compute" type="compute" active="true">
 			<shader type="cs" path="shaders\ComputeCS.glsl" entry="main" />
 			<groupsize x="1" y="1" z="1" />
+			<variables>
+				<variable type="float2" name="uMousePosition" system="MousePosition" />
+			</variables>
 			<macros />
 		</pass>
 	</pipeline>
@@ -50,9 +53,9 @@
 		<entry type="file" name="Render" shader="vs" />
 		<entry type="file" name="Render" shader="ps" />
 		<entry type="camera" fp="false">
-			<distance>4</distance>
-			<pitch>-89</pitch>
-			<yaw>52</yaw>
+			<distance>25</distance>
+			<pitch>-31</pitch>
+			<yaw>148</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
