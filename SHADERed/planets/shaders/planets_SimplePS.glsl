@@ -1,13 +1,14 @@
 #version 440
 
 layout(std430, binding = 0) buffer DataBuffer {
-    vec3 data;
+    vec3 camera;
+    vec3 dir; // need to define this so can rotate
 };
 
 
 uniform vec2 uResolution;
 uniform float uTime;
-uniform vec2 mouse;
+uniform vec4 uMouse;
 uniform sampler2D uKeyboard;
 uniform int uFrame;
 
@@ -78,11 +79,10 @@ float rayMarch(vec3 ro, vec3 rd) {
 void main()
 {   
     vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / uResolution.y;
-    vec2 m = (mouse.xy * 2. - uResolution.xy) / uResolution.y;
+    vec2 m = (uMouse.xy * 2. - uResolution.xy) / uResolution.y;
 
     vec3 direction = vec3(0);
 
-	vec3 camera = data;
     vec3 ro = camera; // camera, ray origin
 
     vec3 rd = normalize(vec3(vec3(uv, 1.0)));
@@ -102,8 +102,6 @@ void main()
             col = p; // while testing
         }
     }
-
- 	data = camera;
 
     outColor = vec4(col,1.0);
 }
