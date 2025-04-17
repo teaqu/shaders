@@ -2,8 +2,8 @@
 <project version="2">
 	<pipeline>
 		<pass name="Render" type="shader" active="true" patchverts="1">
-			<shader type="vs" path="shaders\planets_SimpleVS.glsl" entry="main" />
-			<shader type="ps" path="shaders\planets_SimplePS.glsl" entry="main" />
+			<shader type="vs" path="shaders/move_RenderVS.glsl" entry="main" />
+			<shader type="ps" path="shaders/move_RenderPS.glsl" entry="main" />
 			<inputlayout>
 				<item value="Position" semantic="POSITION" />
 			</inputlayout>
@@ -33,38 +33,59 @@
 			</variables>
 			<macros />
 		</pass>
-		<pass name="Compute" type="compute" active="true">
-			<shader type="cs" path="shaders\ComputeCS.glsl" entry="main" />
-			<groupsize x="1" y="1" z="1" />
+		<pass name="Move" type="shader" active="true" patchverts="1">
+			<shader type="vs" path="shaders/move_MoveVS.glsl" entry="main" />
+			<shader type="ps" path="shaders/move_MovePS.glsl" entry="main" />
+			<inputlayout>
+				<item value="Position" semantic="POSITION" />
+				<item value="Normal" semantic="NORMAL" />
+				<item value="Texcoord" semantic="TEXCOORD0" />
+			</inputlayout>
+			<rendertexture name="MoveT" />
+			<items>
+				<item name="Moved" type="geometry">
+					<type>ScreenQuadNDC</type>
+					<width>1</width>
+					<height>1</height>
+					<depth>1</depth>
+					<topology>TriangleList</topology>
+				</item>
+			</items>
+			<itemvalues />
 			<variables>
 				<variable type="float2" name="uMousePosition" system="MousePosition" />
-				<variable type="float4" name="uMouse" system="Mouse" />
+				<variable type="float4" name="uMouse">
+					<row>
+						<value>0</value>
+						<value>0</value>
+						<value>0</value>
+						<value>0</value>
+					</row>
+				</variable>
 			</variables>
 			<macros />
 		</pass>
 	</pipeline>
 	<objects>
 		<object type="texture" name="keyboard" keyboard_texture="true">
-			<bind slot="0" name="Render" />
+			<bind slot="0" name="Move" />
 		</object>
-		<object type="buffer" name="camera" size="36" format="vec3" pausedpreview="false">
+		<object type="rendertexture" name="MoveT" format="R32G32B32_FLOAT" fsize="10,10" clear="true">
 			<bind slot="0" name="Render" />
-			<bind slot="0" name="Compute" />
+			<bind slot="1" name="Move" />
 		</object>
 	</objects>
 	<cameras />
 	<settings>
-		<entry type="file" name="Render" shader="vs" />
-		<entry type="file" name="Render" shader="ps" />
-		<entry type="file" name="Compute" shader="cs" />
 		<entry type="camera" fp="false">
-			<distance>22</distance>
-			<pitch>66</pitch>
-			<yaw>117</yaw>
+			<distance>27</distance>
+			<pitch>70</pitch>
+			<yaw>130</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
 		<entry type="usealpha" val="false" />
+		<entry type="bkpt" file="c:/Users/calum/Projects/shaders/SHADERed/planets/shaders/planets_SimplePS.glsl" line="85" use_cond="false" cond="" enabled="true" />
 	</settings>
 	<plugindata />
 </project>

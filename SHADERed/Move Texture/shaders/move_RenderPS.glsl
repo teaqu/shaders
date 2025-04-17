@@ -1,17 +1,12 @@
-#version 440
-
-layout(std430, binding = 0) buffer DataBuffer {
-    vec3 camera;
-    float yaw;
-    float pitch;
-};
-
+#version 330
 
 uniform vec2 uResolution;
 uniform float uTime;
 uniform vec4 uMouse;
 uniform sampler2D uKeyboard;
 uniform int uFrame;
+
+uniform sampler2D uMoved; 
 
 out vec4 outColor;
 
@@ -29,15 +24,6 @@ mat2 rotate2D(float angle) {
     return mat2(c, -s, s, c);
 }
 
-mat3 rotateY(float angle) {
-    float c = cos(angle);
-    float s = sin(angle);
-    return mat3(
-        c, 0.0, -s,
-        0.0, 1.0, 0.0,
-        s, 0.0, c
-    );
-}
 
 vec4[5] planets;
 const vec3[5] colours = vec3[5](
@@ -75,7 +61,7 @@ vec3 getColour(vec3 p) {
     }
     return colours[mini];
 }
-
+// com
 float rayMarch(vec3 ro, vec3 rd) {
     float d = 0.0; // distance traveled
     for (int i = 0; i < MAX_STEPS; ++i) {
@@ -86,33 +72,23 @@ float rayMarch(vec3 ro, vec3 rd) {
     }
     return d;
 }
-
 void main()
-{
+{   
     vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / uResolution.y;
     vec2 m = (uMouse.xy * 2. - uResolution.xy) / uResolution.y;
 
     vec3 direction = vec3(0);
-    vec3 ro = camera; // camera, ray origin
 
-  // Convert yaw + pitch to direction vector
-	vec3 forward = normalize(vec3(
-	    cos(pitch) * sin(yaw),
-	    sin(pitch),
-	    cos(pitch) * cos(yaw)
-	));
-	
-	vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
-	vec3 up = cross(forward, right);
-	
-    vec3 rd = normalize(forward + uv.x * right + uv.y * up);
+    vec3 ro = texelFetch(uMoved, ivec2(0, 0), 0).xyz; // camera, ray origin
+
+    vec3 rd = normalize(vec3(vec3(uv, 1.0)));
 
     planets[0] = vec4(0, 0, 0, 0.51); // last no radius
     planets[1] = vec4(sin(uTime), 0, cos(uTime), 0.052);
     planets[2] = vec4(sin(uTime * 2.0 + 20.0), cos(uTime * 2.0 + 20.0), cos(uTime * 2.0 + 20.0), 0.052);
     planets[3] = vec4(sin(uTime + 20.0), 0, sin(uTime), 0.052);
     planets[4] = vec4(sin(uTime * 3.0 + 30.0), sin(uTime * 3.0), 0, 0.052);
-
+    
     float d = rayMarch(ro, rd);
     vec3 col = vec3(0.05);
     if (d < MAX_DIST) {
