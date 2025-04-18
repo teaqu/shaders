@@ -4,8 +4,8 @@ layout(std430, binding = 0) buffer DataBuffer {
     vec3 camera;
     float yaw;
     float pitch;
+    float roll;
 };
-
 
 uniform vec2 uResolution;
 uniform float uTime;
@@ -23,22 +23,6 @@ bool isKeyDown(int key) {
 	return texelFetch(uKeyboard, ivec2(key, 0), 0).x == 1.0;
 }
 
-mat2 rotate2D(float angle) {
-    float s = sin(angle);
-    float c = cos(angle);
-    return mat2(c, -s, s, c);
-}
-
-mat3 rotateY(float angle) {
-    float c = cos(angle);
-    float s = sin(angle);
-    return mat3(
-        c, 0.0, -s,
-        0.0, 1.0, 0.0,
-        s, 0.0, c
-    );
-}
-
 vec4[5] planets;
 const vec3[5] colours = vec3[5](
 vec3(0.1, 0.5, 0.8),
@@ -53,6 +37,7 @@ float getLen(vec3 p, vec4 s) {
 }
 
 float getDist(vec3 p) {
+    // Planets
     float minDist = getLen(p, planets[0]);
     for (int i = 1; i < planets.length(); ++i) {
         float dist = getLen(p, planets[i]);
@@ -60,7 +45,11 @@ float getDist(vec3 p) {
             minDist = dist;
         }
     }
-    return minDist;
+    
+   	// Floor
+   	float floorDist = p.y + 10.0; 
+   	
+    return min(floorDist, minDist);
 }
 
 vec3 getColour(vec3 p) {
@@ -73,7 +62,13 @@ vec3 getColour(vec3 p) {
             mini = i;
         }
     }
-    return colours[mini];
+    
+    // Floor
+   	if (p.y + 10.0 < minDist) {
+   		return vec3(1.0);
+   	} else {
+   		return colours[mini];
+   	}
 }
 
 float rayMarch(vec3 ro, vec3 rd) {
@@ -87,31 +82,43 @@ float rayMarch(vec3 ro, vec3 rd) {
     return d;
 }
 
-void main()
-{
-    vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / uResolution.y;
-    vec2 m = (uMouse.xy * 2. - uResolution.xy) / uResolution.y;
-
-    vec3 direction = vec3(0);
-    vec3 ro = camera; // camera, ray origin
-
-  // Convert yaw + pitch to direction vector
+vec3 calcDirection(vec2 uv) {
 	vec3 forward = normalize(vec3(
+		// sideways includes pitch as if ur looking up less to move sideways (x)
 	    cos(pitch) * sin(yaw),
+	    // up down (y)
 	    sin(pitch),
+	    // forward backwards (z)
 	    cos(pitch) * cos(yaw)
 	));
 	
 	vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
 	vec3 up = cross(forward, right);
-	
-    vec3 rd = normalize(forward + uv.x * right + uv.y * up);
+ 
+    float cosR = cos(roll);
+    float sinR = sin(roll);
 
-    planets[0] = vec4(0, 0, 0, 0.51); // last no radius
-    planets[1] = vec4(sin(uTime), 0, cos(uTime), 0.052);
-    planets[2] = vec4(sin(uTime * 2.0 + 20.0), cos(uTime * 2.0 + 20.0), cos(uTime * 2.0 + 20.0), 0.052);
-    planets[3] = vec4(sin(uTime + 20.0), 0, sin(uTime), 0.052);
-    planets[4] = vec4(sin(uTime * 3.0 + 30.0), sin(uTime * 3.0), 0, 0.052);
+    vec3 rolledRight = right * cosR - up * sinR;
+    vec3 rolledUp    = right * sinR + up * cosR;
+
+    return normalize(forward + uv.x * rolledRight + uv.y * rolledUp);
+}
+
+void genPlanets(float time) {
+  	planets[0] = vec4(0, 0, 0, 0.51); // last no radius
+  	planets[1] = vec4(sin(time), 0, cos(time), 0.052);
+    planets[2] = vec4(sin(time * 2.0 + 20.0), cos(time * 2.0 + 20.0), cos(time * 2.0 + 20.0), 0.052);
+    planets[3] = vec4(sin(time + 20.0), 0, sin(time), 0.052);
+    planets[4] = vec4(sin(time * 3.0 + 30.0), sin(time * 3.0), 0, 0.052);	
+}
+
+void main()
+{
+	genPlanets(uTime);
+    vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / uResolution.y;
+
+    vec3 ro = camera;
+	vec3 rd = calcDirection(uv);
 
     float d = rayMarch(ro, rd);
     vec3 col = vec3(0.05);
@@ -119,7 +126,7 @@ void main()
         vec3 p = (ro + rd * d);
         col = getColour(p);
         if (col == colours[0]) {
-            col = p; // while testing
+            col = (ro + rd * d);
         }
     }
 
