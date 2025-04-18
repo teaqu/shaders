@@ -54,13 +54,12 @@
 	</objects>
 	<cameras />
 	<settings>
-		<entry type="file" name="Render" shader="vs" />
-		<entry type="file" name="Render" shader="ps" />
+		<entry type="file" name="Compute" shader="cs" />
 		<entry type="camera" fp="false">
-			<distance>22</distance>
-			<pitch>86</pitch>
-			<yaw>202</yaw>
-			<roll>360</roll>
+			<distance>0</distance>
+			<pitch>0</pitch>
+			<yaw>0</yaw>
+			<roll>0</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
 		<entry type="usealpha" val="false" />

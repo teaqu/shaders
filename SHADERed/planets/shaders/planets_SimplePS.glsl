@@ -1,5 +1,9 @@
 #version 440
 
+#define MAX_STEPS 1000
+#define MAX_DIST 200.0
+#define SURFACE_DIST .001
+
 layout(std430, binding = 0) buffer DataBuffer {
     vec3 camera;
     float yaw;
@@ -15,25 +19,36 @@ uniform int uFrame;
 
 out vec4 outColor;
 
-#define MAX_STEPS 1000
-#define MAX_DIST 200.0
-#define SURFACE_DIST .001
-
-bool isKeyDown(int key) {
-	return texelFetch(uKeyboard, ivec2(key, 0), 0).x == 1.0;
-}
-
 vec4[5] planets;
 const vec3[5] colours = vec3[5](
-vec3(0.1, 0.5, 0.8),
+	vec3(0.1, 0.5, 0.8),
     vec3(0.3),
     vec3(0.2, 1.0, 0.5),
     vec3(0.9, 0.3, 0.8),
     vec3(0.6, 0.5, 0.7)
 );
 
+bool isKeyDown(int key) {
+	return texelFetch(uKeyboard, ivec2(key, 0), 0).x == 1.0;
+}
+
 float getLen(vec3 p, vec4 s) {
     return length(p - 0.5 - s.xyz) - s.w;
+}
+
+float sdBoxFrame( vec3 p, vec3 b, float e )
+{
+       p = abs(p  )-b;
+  vec3 q = abs(p+e)-e;
+  return min(min(
+      length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
+      length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
+      length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
+}
+
+float frameDistance(vec3 p) {
+
+	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), 0.004);
 }
 
 float getDist(vec3 p) {
@@ -47,9 +62,9 @@ float getDist(vec3 p) {
     }
     
    	// Floor
-   	float floorDist = p.y + 10.0; 
+   	float d = frameDistance(p);
    	
-    return min(floorDist, minDist);
+    return min(d, minDist);
 }
 
 vec3 getColour(vec3 p) {
@@ -64,8 +79,9 @@ vec3 getColour(vec3 p) {
     }
     
     // Floor
-   	if (p.y + 10.0 < minDist) {
-   		return vec3(1.0);
+    float d = frameDistance(p);
+   	if (d < minDist) {
+   		return vec3(0.6);
    	} else {
    		return colours[mini];
    	}

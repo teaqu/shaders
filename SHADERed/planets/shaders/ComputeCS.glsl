@@ -40,7 +40,7 @@ bool isKeyDown(int key) {
 
 vec3 keyboard() {
 
-	if (camera == vec3(1.0)) {
+	if (camera == vec3(0.0)) {
 		 camera = vec3(0, 0, -6);
 	}
 	
