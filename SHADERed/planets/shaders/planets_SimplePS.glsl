@@ -2,7 +2,7 @@
 
 #define MAX_STEPS 1000
 #define MAX_DIST 200.0
-#define SURFACE_DIST .001
+#define SURFACE_DIST .0001
 
 layout(std430, binding = 0) buffer DataBuffer {
     vec3 camera;
@@ -46,12 +46,12 @@ float sdBoxFrame( vec3 p, vec3 b, float e )
       length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
 }
 
-float frameDistance(vec3 p) {
+float frameDistance(vec3 p, float d) {
 
-	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), 0.004);
+	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), 0.002 + (d-3.0) * 0.0009);
 }
 
-float getDist(vec3 p) {
+float getDist(vec3 p, float d) {
     // Planets
     float minDist = getLen(p, planets[0]);
     for (int i = 1; i < planets.length(); ++i) {
@@ -62,12 +62,12 @@ float getDist(vec3 p) {
     }
     
    	// Floor
-   	float d = frameDistance(p);
+   	float frame = frameDistance(p, d);			
    	
-    return min(d, minDist);
+    return min(frame, minDist);
 }
 
-vec3 getColour(vec3 p) {
+vec3 getColour(vec3 p, float d) {
     float minDist = getLen(p, planets[0]);
     int mini = 0;
     for (int i = 1; i < planets.length(); ++i) {
@@ -79,9 +79,9 @@ vec3 getColour(vec3 p) {
     }
     
     // Floor
-    float d = frameDistance(p);
-   	if (d < minDist) {
-   		return vec3(0.6);
+    float frame = frameDistance(p, d);
+   	if (frame < minDist) {
+   		return vec3(max(5 / (d * 2), 0.05));
    	} else {
    		return colours[mini];
    	}
@@ -91,7 +91,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     float d = 0.0; // distance traveled
     for (int i = 0; i < MAX_STEPS; ++i) {
         vec3 p = ro + d * rd; // position along the ray
-        float cd = getDist(p); // current distance
+        float cd = getDist(p, d); // current distance
         d += cd; // march the ray
         if (cd < SURFACE_DIST || d > MAX_DIST) break;
     }
@@ -140,7 +140,7 @@ void main()
     vec3 col = vec3(0.05);
     if (d < MAX_DIST) {
         vec3 p = (ro + rd * d);
-        col = getColour(p);
+        col = getColour(p, d);
         if (col == colours[0]) {
             col = (ro + rd * d);
         }
