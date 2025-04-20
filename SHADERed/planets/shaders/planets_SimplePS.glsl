@@ -81,7 +81,7 @@ vec3 getColour(vec3 p, float d) {
     // Floor
     float frame = frameDistance(p, d);
    	if (frame < minDist) {
-   		return vec3(min(5 / (d * 3), 0.5));
+   		return vec3(min(max(5 / (d * 3), 0.05), 0.4));
    	} else {
    		return colours[mini];
    	}
