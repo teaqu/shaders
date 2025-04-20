@@ -1,8 +1,8 @@
 #version 440
 
-#define MAX_STEPS 1000
+#define MAX_STEPS 100
 #define MAX_DIST 200.0
-#define SURFACE_DIST .0001
+#define SURFACE_DIST .005
 
 layout(std430, binding = 0) buffer DataBuffer {
     vec3 camera;
@@ -48,7 +48,7 @@ float sdBoxFrame( vec3 p, vec3 b, float e )
 
 float frameDistance(vec3 p, float d) {
 
-	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), 0.002 + (d-3.0) * 0.0009);
+	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), d * 0.0009);
 }
 
 float getDist(vec3 p, float d) {
@@ -81,7 +81,7 @@ vec3 getColour(vec3 p, float d) {
     // Floor
     float frame = frameDistance(p, d);
    	if (frame < minDist) {
-   		return vec3(max(5 / (d * 2), 0.05));
+   		return vec3(min(5 / (d * 3), 0.5));
    	} else {
    		return colours[mini];
    	}
