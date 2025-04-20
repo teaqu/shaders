@@ -57,9 +57,9 @@
 		<entry type="file" name="Render" shader="vs" />
 		<entry type="file" name="Render" shader="ps" />
 		<entry type="camera" fp="false">
-			<distance>11</distance>
-			<pitch>89</pitch>
-			<yaw>332</yaw>
+			<distance>12</distance>
+			<pitch>32</pitch>
+			<yaw>338</yaw>
 			<roll>0</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />

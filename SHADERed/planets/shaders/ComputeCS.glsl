@@ -6,6 +6,7 @@ uniform vec4 uMouse;
 
 const float SPEED = 0.05;
 const float SPEED_ROT = 0.03;
+const int KEY_SHIFT = 16;
 const int KEY_w = 87;
 const int KEY_s = 83;
 const int KEY_a = 65;
@@ -49,29 +50,33 @@ vec3 keyboard() {
 		vec3 right = vec3(-cos(yaw), 0.0, sin(yaw));
 		vec3 up = cross(forward, right);
 
+		float speed = SPEED;
+		if (isKeyDown(KEY_SHIFT)) {
+			speed += 0.2;
+		}
 
 		if (isKeyDown(KEY_a)) {
-        	camera += right * SPEED;
+        	camera += right * speed;
 	    }
 
 	    if (isKeyDown(KEY_d)) {
-	        camera -= right * SPEED;
+	        camera -= right * speed;
 	    }
 	
 	    if (isKeyDown(KEY_w)) {
-	        camera += forward * SPEED;
+	        camera += forward * speed;
 	    }
 
 	    if (isKeyDown(KEY_s)) {
-	        camera -= forward * SPEED;
+	        camera -= forward * speed;
 	    }
 	
 	    if (isKeyDown(KEY_e)) {
-	       camera += up * SPEED;
+	       camera += up * speed;
 	    }
 	    
 	    if (isKeyDown(KEY_q)) {
-	        camera -= up * SPEED;
+	        camera -= up * speed;
 	    }
 	    
 	    if (isKeyDown(KEY_j)) {
