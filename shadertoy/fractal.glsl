@@ -8,8 +8,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     uv.x = abs(uv.x);
     uv.x -= .5;
 
-    
-
     float d = length(uv - vec2(clamp(uv.x, -1., 1.), 0));
     col += smoothstep(.03, .0, d);
 

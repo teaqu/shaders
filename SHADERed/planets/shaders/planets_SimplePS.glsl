@@ -99,18 +99,18 @@ float rayMarch(vec3 ro, vec3 rd) {
 }
 
 vec3 calcDirection(vec2 uv) {
-	vec3 forward = normalize(vec3(
-		// sideways includes pitch as if ur looking up less to move sideways (x)
-	    cos(pitch) * sin(yaw),
-	    // up down (y)
-	    sin(pitch),
-	    // forward backwards (z)
-	    cos(pitch) * cos(yaw)
-	));
-	
-	vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
-	vec3 up = cross(forward, right);
- 
+    vec3 forward = normalize(vec3(
+        cos(pitch) * sin(yaw),
+        sin(pitch),
+        cos(pitch) * cos(yaw)
+    ));
+
+    // Choose a world up that is **not parallel** to forward
+    vec3 worldUp = abs(forward.y) > 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(0.0, 1.0, 0.0);
+
+    vec3 right = normalize(cross(worldUp, forward));
+    vec3 up = cross(forward, right);
+
     float cosR = cos(roll);
     float sinR = sin(roll);
 

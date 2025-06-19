@@ -1,0 +1,11 @@
+{
+  "Buffer1": {
+      "Source": "planets_move.glsl",
+      "Channel0": "Buffer1",
+      "Channel1": "Keyboard"
+  },
+  "Image": {
+    "Source": "planets.glsl",
+    "Channel0": "Buffer1"
+  }
+}

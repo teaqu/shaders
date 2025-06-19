@@ -1,10 +1,11 @@
+uniform float uTime;
+uniform vec4 uMouse;
+uniform int uFrame;
 
-#iChannel0 "file://planets_move.glsl"
-
-#define SPEED 0.05
 #define MAX_STEPS 1000
 #define MAX_DIST 200.0
 #define SURFACE_DIST .001
+
 
 vec4[5] planets;
 const vec3[5] colours = vec3[5](
@@ -42,7 +43,7 @@ vec3 getColour(vec3 p) {
     }
     return colours[mini];
 }
-
+// com
 float rayMarch(vec3 ro, vec3 rd) {
     float d = 0.0; // distance traveled
     for (int i = 0; i < MAX_STEPS; ++i) {
@@ -53,13 +54,16 @@ float rayMarch(vec3 ro, vec3 rd) {
     }
     return d;
 }
-void mainImage(out vec4 fragColor, in vec2 fragCoord)
-{   
-    vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y;
-    vec2 m = (iMouse.xy * 2. - iResolution.xy) / iResolution.y;
-    vec3 camera = texture(iChannel0, vec2(vec2(0, 0.1))).xyz;
-    vec3 direction = texture(iChannel0, vec2(vec2(0, 0.9))).xyz;
-    vec3 ro = camera.xyz; // camera, ray origin
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 uv = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;
+    vec2 m = (uMouse.xy * 2. - iResolution.xy) / iResolution.y;
+
+    vec3 direction = vec3(0);
+
+    vec3 ro = texelFetch(iChannel0, ivec2(0, 0), 0).xyz; // camera, ray origin
+
     vec3 rd = normalize(vec3(vec3(uv, 1.0)));
 
     planets[0] = vec4(0, 0, 0, 0.51); // last no radius
@@ -77,6 +81,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
             col = p; // while testing
         }
     }
-    
+
     fragColor = vec4(col,1.0);
 }
