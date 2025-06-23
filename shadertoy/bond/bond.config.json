@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "Image": {
+    "inputs": {
+      "iChannel0": {
+        "path": "bond.png",
+        "type": "image"
+      }
+    }
+  }
+}

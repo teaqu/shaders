@@ -1,14 +1,14 @@
-#define Key_A 0
-#define Key_D 1
-#define Key_W 2
-#define Key_S 3
-#define Key_UpArrow 4
-#define Key_DownArrow 5
-#define Key_LeftArrow 6
-#define Key_RightArrow 7
+#define Key_A 65
+#define Key_D 68
+#define Key_W 87
+#define Key_S 83
+#define Key_UpArrow 38 
+#define Key_DownArrow 40 
+#define Key_LeftArrow 37 
+#define Key_RightArrow 39
 
 bool isKeyDown(int keyCode) {
-    return texelFetch(iChannel0, ivec2(keyCode, 0), 0).r > 0.0;
+    return texelFetch(iChannel1, ivec2(keyCode, 0), 0).r > 0.0;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)

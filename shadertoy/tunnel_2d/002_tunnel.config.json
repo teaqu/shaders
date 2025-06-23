@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "Image": {
+    "inputs": {
+      "iChannel0": {
+        "path": "canvas.png",
+        "type": "image"
+      }
+    }
+  }
+}

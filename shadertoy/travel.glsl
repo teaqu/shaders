@@ -1,4 +1,3 @@
-#iChannel0 "file://buffers/move.glsl"
 #define SPEED 0.01;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )

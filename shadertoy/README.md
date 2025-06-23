@@ -1,3 +1,3 @@
 # Shadertoy Shaders
 
-Currently using shaderlens emulates the website.
+Using https://github.com/teaqu/shader-view

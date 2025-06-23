@@ -32,5 +32,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     col = vec3(1.0, 0.0, 0.0) * ring; // Red square ring
     col += vec3(1.0, 0.0, 0.0) * ring;
     
-    fragColor = vec4(col * sq,1.0);
+    fragColor = vec4(col * sq,1.0); 
 }

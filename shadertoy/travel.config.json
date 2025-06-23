@@ -1,0 +1,22 @@
+{
+  "Image": {
+    "inputs": {
+      "iChannel0": {
+        "source": "BufferA",
+        "type": "buffer"
+      }
+    }
+  },
+  "BufferA": {
+    "path": "./buffers/move.glsl",
+    "inputs": {
+      "iChannel0": {
+        "source": "BufferA",
+        "type": "buffer"
+      },
+      "iChannel1": {
+        "type": "keyboard"
+      }
+    }
+  }
+}
