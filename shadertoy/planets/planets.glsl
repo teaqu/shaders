@@ -85,6 +85,33 @@ void genPlanets(float time) {
     planets[4] = vec4(sin(time * 3.0 + 30.0), sin(time * 3.0), 0, 0.052);	
 }
 
+vec3 calcDirection(vec2 uv) {
+    vec3 ypr = texelFetch(iChannel0, ivec2(1, 0), 0).xyz; // yaw, pitch, roll
+    float yaw = ypr.x;
+    float pitch = ypr.y;
+    float roll = ypr.z;
+
+    vec3 forward = normalize(vec3(
+        cos(pitch) * sin(yaw),
+        sin(pitch),
+        cos(pitch) * cos(yaw)
+    ));
+
+    // Choose a world up that is **not parallel** to forward
+    vec3 worldUp = abs(forward.y) > 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(0.0, 1.0, 0.0);
+
+    vec3 right = normalize(cross(worldUp, forward));
+    vec3 up = cross(forward, right);
+
+    float cosR = cos(roll);
+    float sinR = sin(roll);
+
+    vec3 rolledRight = right * cosR - up * sinR;
+    vec3 rolledUp    = right * sinR + up * cosR;
+
+    return normalize(forward + uv.x * rolledRight + uv.y * rolledUp);
+}
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec2 uv = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;
@@ -92,14 +119,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 direction = vec3(0);
 
     vec3 ro = texelFetch(iChannel0, ivec2(0, 0), 0).xyz; // camera, ray origin
-
-    vec3 rd = normalize(vec3(vec3(uv, 1.0)));
-
-    planets[0] = vec4(0, 0, 0, 0.51); // last no radius
-    planets[1] = vec4(sin(iTime), 0, cos(iTime), 0.052);
-    planets[2] = vec4(sin(iTime * 2.0 + 20.0), cos(iTime * 2.0 + 20.0), cos(iTime * 2.0 + 20.0), 0.052);
-    planets[3] = vec4(sin(iTime + 20.0), 0, sin(iTime), 0.052);
-    planets[4] = vec4(sin(iTime * 3.0 + 30.0), sin(iTime * 3.0), 0, 0.052);
+	vec3 rd = calcDirection(uv);
+    
+    genPlanets(iTime);
     
     float d = rayMarch(ro, rd);
     vec3 col = vec3(0.05);
@@ -111,5 +133,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
     }
 
-    fragColor = vec4(col,1.0);
+    fragColor = vec4(col, 1.0);
 }

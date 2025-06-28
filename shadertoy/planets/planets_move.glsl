@@ -1,6 +1,6 @@
-uniform vec4 uMouse;
-
-const float SPEED = 0.05; 
+const float SPEED = 0.05;
+const float SPEED_ROT = 0.03;
+const int KEY_SHIFT = 16;
 const int KEY_w = 87;
 const int KEY_s = 83;
 const int KEY_a = 65;
@@ -13,8 +13,12 @@ const int KEY_RIGHT = 39;
 const int KEY_DOWN = 40;
 const int KEY_RETURN = 13;
 const int KEY_CTRL = 17;
-const int KEY_j = 74; 
-const int KEY_l = 76; 
+const int KEY_j = 74;
+const int KEY_l = 76;
+const int KEY_i = 73;
+const int KEY_k = 75;
+const int KEY_u = 85;
+const int KEY_o = 79;
 
 
 bool isKeyDown(int key) {
@@ -22,49 +26,71 @@ bool isKeyDown(int key) {
 }
 	    
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
-
 {   
 	vec3 camera = texelFetch(iChannel0, ivec2(0, 0), 0).xyz;
+    vec3 ypr = texelFetch(iChannel0, ivec2(1, 0), 0).xyz; // yaw, pitch, roll
+    float yaw = ypr.x;
+    float pitch = ypr.y;
+    float roll = ypr.z;
 	
-	if (camera == vec3(1.0)) {
-		 camera = vec3(0, 0, -6);
-	}
+	vec3 forward = vec3(sin(ypr.x), 0.0, cos(ypr.x));
+    vec3 right = vec3(-cos(ypr.x), 0.0, sin(ypr.x));
+    vec3 up = cross(forward, right);
+
+    float speed = SPEED;
+    if (isKeyDown(KEY_SHIFT)) {
+        speed += 0.2;
+    }
 
     if (isKeyDown(KEY_a)) {
-        camera.x -= SPEED;
+        camera += right * speed;
     }
 
     if (isKeyDown(KEY_d)) {
-        camera.x += SPEED;
+        camera -= right * speed;
     }
 
     if (isKeyDown(KEY_w)) {
-        camera.z += SPEED;
+        camera += forward * speed;
     }
 
     if (isKeyDown(KEY_s)) {
-        camera.z -= SPEED;
+        camera -= forward * speed;
     }
 
     if (isKeyDown(KEY_e)) {
-       camera.y += SPEED;
+        camera += up * speed;
     }
-
+    
     if (isKeyDown(KEY_q)) {
-        camera.y -= SPEED;
+        camera -= up * speed;
     }
-
-    if (isKeyDown(KEY_LEFT)) {
-        camera.x -= SPEED;
-    }
-
+    
     if (isKeyDown(KEY_j)) {
-        camera.x -= SPEED;
+        yaw -= SPEED_ROT;
+    }
+    
+    if (isKeyDown(KEY_l)) {
+        yaw += SPEED_ROT;
+    }
+    
+    if (isKeyDown(KEY_i)) {
+        pitch += SPEED_ROT;
+    }
+    
+    if (isKeyDown(KEY_k)) {
+        pitch -= SPEED_ROT;
     }
 
-    if (isKeyDown(KEY_l)) {
-        camera.x -= SPEED;
-    }
+    ypr = vec3(yaw, pitch, roll);
 	
-    fragColor = vec4(camera, 1.0);
+    ivec2 c = ivec2(fragCoord );
+    if (c == ivec2(0, 0)) {
+        fragColor = vec4(camera, 1.0);
+    } else if (c == ivec2(1, 0)) {
+        fragColor = vec4(ypr, 1.0);
+    } else {
+        fragColor = texelFetch(iChannel0, c, 0);
+    }
+
 }
