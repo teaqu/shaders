@@ -82,6 +82,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         pitch -= SPEED_ROT;
     }
 
+    if (pitch > 1.57) {
+        pitch = 1.57; // limit pitch to avoid gimbal lock
+    } else if (pitch < -1.57) {
+        pitch = -1.57; // limit pitch to avoid gimbal lock
+    }
+
     ypr = vec3(yaw, pitch, roll);
 	
     ivec2 c = ivec2(fragCoord );
