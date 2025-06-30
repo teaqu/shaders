@@ -33,9 +33,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float pitch = ypr.y;
     float roll = ypr.z;
 	
-	vec3 forward = vec3(sin(ypr.x), 0.0, cos(ypr.x));
-    vec3 right = vec3(-cos(ypr.x), 0.0, sin(ypr.x));
+	vec3 forward = vec3(sin(yaw), 0.0, cos(yaw));
+    vec3 right = vec3(-cos(yaw), 0.0, sin(yaw));
     vec3 up = cross(forward, right);
+
+    if (camera == vec3(0.0)) {
+        camera = vec3(0.5, 0.5, -2.5); // default camera position
+    }
 
     float speed = SPEED;
     if (isKeyDown(KEY_SHIFT)) {
