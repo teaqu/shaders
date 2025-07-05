@@ -6,12 +6,12 @@ vec4 ball;
 
 float sdBoxFrame( vec3 p, vec3 b, float e )
 {
-       p = abs(p  )-b;
-  vec3 q = abs(p+e)-e;
-  return min(min(
-      length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
-      length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
-      length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
+    p = abs(p  )-b;
+    vec3 q = abs(p+e)-e;
+    return min(min(
+        length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
+        length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
+        length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
 }
 
 
@@ -24,9 +24,8 @@ float getLen(vec3 p, vec4 s) {
 }
 
 float getDist(vec3 p, float d) {
-    // Planets
+    // ball
     float minDist = getLen(p, ball);
-    
     
    	// Floor
    	float frame = frameDistance(p, d);			
@@ -45,33 +44,6 @@ float rayMarch(vec3 ro, vec3 rd) {
     return d;
 }
 
-vec3 calcDirection(vec2 uv) {
-    vec3 ypr = texelFetch(iChannel0, ivec2(1, 0), 0).xyz; // yaw, pitch, roll
-    float yaw = ypr.x;
-    float pitch = ypr.y;
-    float roll = ypr.z;
-
-    vec3 forward = normalize(vec3(
-        cos(pitch) * sin(yaw),
-        sin(pitch),
-        cos(pitch) * cos(yaw)
-    ));
-
-    // Choose a world up that is **not parallel** to forward
-    vec3 worldUp = abs(forward.y) > 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(0.0, 1.0, 0.0);
-
-    vec3 right = normalize(cross(worldUp, forward));
-    vec3 up = cross(forward, right);
-
-    float cosR = cos(roll);
-    float sinR = sin(roll);
-
-    vec3 rolledRight = right * cosR - up * sinR;
-    vec3 rolledUp    = right * sinR + up * cosR;
-
-    return normalize(forward + uv.x * rolledRight + uv.y * rolledUp);
-}
-
 vec3 getColour(vec3 p, float d) {
     float minDist = getLen(p, ball);
     
@@ -80,13 +52,12 @@ vec3 getColour(vec3 p, float d) {
    	if (frame < minDist) {
    		return vec3(min(max(5.0 / (d * 3.0), 0.05), 0.4));
    	} else {
-   		return calcDirection(p.xy);
+       if(p.y > ball.y + 0.5) {
+        return vec3(1.0);
+       } else {
+        return vec3(1.0, 0.0, 0.0);
+       }
    	}
-}
-
-void genPlanets(float time) {
-    vec3 ro = texelFetch(iChannel0, ivec2(0, 0), 0).xyz;
-  	ball = vec4(vec3(ro), 1.0);
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
@@ -99,7 +70,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     vec3 rd = normalize(vec3(uv, 1));
 
-    genPlanets(iTime);
+    vec3 buff = texelFetch(iChannel0, ivec2(0, 0), 0).xyz;
+  	ball = vec4(vec3(buff), 1.0);
     
     float d = rayMarch(ro, rd);
     vec3 col = vec3(0.05);

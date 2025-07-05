@@ -63,11 +63,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     if (isKeyDown(KEY_e)) {
-        camera += up * speed;
+        camera -= up * speed;
     }
     
     if (isKeyDown(KEY_q)) {
-        camera -= up * speed;
+        camera += up * speed;
     }
     
     if (isKeyDown(KEY_j)) {
