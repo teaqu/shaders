@@ -14,7 +14,6 @@ float sdBoxFrame( vec3 p, vec3 b, float e )
         length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
 }
 
-
 float frameDistance(vec3 p, float d) {
 	return sdBoxFrame(vec3(fract(p.x), p.y + 2.0, fract(p.z)) - 0.5, vec3(0.5, 0.0, 0.5), d * 0.0009);
 }
@@ -71,6 +70,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 rd = normalize(vec3(uv, 1));
 
     vec3 buff = texelFetch(iChannel0, ivec2(0, 0), 0).xyz;
+    vec3 ypr = texelFetch(iChannel0, ivec2(1, 0), 0).xyz;
   	ball = vec4(vec3(buff), 1.0);
     
     float d = rayMarch(ro, rd);
