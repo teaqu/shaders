@@ -1,6 +1,3 @@
-// https://youtu.be/PGtv-dBi2wE
-// https://youtu.be/khblXafu7iA
-
 #define MAX_STEPS 100
 #define MAX_DIST 50.0
 #define SURFACE_DIST .001
@@ -10,7 +7,6 @@ mat2 rot2D(float angle) {
     float c = cos(angle);
     return mat2(c, -s, s, c);
 }
-
 
 float getDist(vec3 p) {
     vec4 sphere = vec4(0, 0, 0, 0.1); // last no radius

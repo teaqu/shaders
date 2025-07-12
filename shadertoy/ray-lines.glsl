@@ -1,6 +1,3 @@
-// https://youtu.be/PGtv-dBi2wE
-// https://youtu.be/khblXafu7iA
-
 #define MAX_STEPS 200
 #define MAX_DIST 20.
 #define SURFACE_DIST .002
