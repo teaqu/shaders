@@ -1,0 +1,19 @@
+{
+  "Image": {
+    "inputs": {
+      "iChannel0": {
+        "source": "BufferA",
+        "type": "buffer"
+      }
+    }
+  },
+  "BufferA": {
+    "path": "gol-buffer.glsl",
+    "inputs": {
+      "iChannel0": {
+        "source": "BufferA",
+        "type": "buffer"
+      }
+    }
+  }
+}
