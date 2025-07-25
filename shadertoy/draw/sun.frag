@@ -13,7 +13,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     if(auv.y > cRad && pow(auv.x-cPos.x*aspectRatio, 2.0) + pow(auv.y-cPos.y, 2.0) < pow(cRad, 2.0)) {
         fragColor = vec4(0.91, 0.89, 0.01, 1.0);
     } else if (auv.y > cRad){
-        fragColor = vec4(0.02, 0.46, 0.87, 1.0);
+        fragColor = vec4(0.23, 0.36, 0.49, 1.0);
     } else {
         fragColor = vec4(0.18, 0.64, 0.02, 1.0);
     }
