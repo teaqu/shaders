@@ -3,8 +3,8 @@
   "Image": {
     "inputs": {
       "iChannel0": {
-        "path": "bond.png",
-        "type": "image"
+        "type": "texture",
+        "path": "bond.png"
       }
     }
   }
