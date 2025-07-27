@@ -4,13 +4,8 @@
     "Image": {
       "inputs": {
         "iChannel0": {
-<<<<<<< HEAD
-          "source": "BufferA",
-          "type": "buffer"
-=======
           "type": "buffer",
           "source": "BufferA"
->>>>>>> 2dcab1a (slime)
         }
       }
     },
@@ -18,13 +13,8 @@
       "path": "buffers/move.glsl",
       "inputs": {
         "iChannel0": {
-<<<<<<< HEAD
-          "source": "BufferA",
-          "type": "buffer"
-=======
           "type": "buffer",
           "source": "BufferA"
->>>>>>> 2dcab1a (slime)
         },
         "iChannel1": {
           "type": "keyboard"
