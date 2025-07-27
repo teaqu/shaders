@@ -1,18 +1,21 @@
 {
-  "Image": {
-    "inputs": {
-      "iChannel0": {
-        "source": "BufferA",
-        "type": "buffer"
+  "version": "1.0",
+  "passes": {
+    "Image": {
+      "inputs": {
+        "iChannel0": {
+          "source": "BufferA",
+          "type": "buffer"
+        }
       }
-    }
-  },
-  "BufferA": {
-    "path": "gol-buffer.glsl",
-    "inputs": {
-      "iChannel0": {
-        "source": "BufferA",
-        "type": "buffer"
+    },
+    "BufferA": {
+      "path": "gol-buffer.glsl",
+      "inputs": {
+        "iChannel0": {
+          "source": "BufferA",
+          "type": "buffer"
+        }
       }
     }
   }

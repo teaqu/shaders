@@ -1,9 +1,11 @@
 {
   "version": "1.0",
-  "Image": {
-    "inputs": {
-      "iChannel0": {
-        "type": "keyboard"
+  "passes": {
+    "Image": {
+      "inputs": {
+        "iChannel0": {
+          "type": "keyboard"
+        }
       }
     }
   }
