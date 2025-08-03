@@ -32,7 +32,12 @@ float frameDistance(vec3 p, float d) {
 
 float getDist(vec3 p, float d) {
     // Planets
-    planets[0] += (sin(p.y + iTime) + 1.0)/10.0;
+    //planets[0] += (sin(p.y + iTime) + 1.0)/10.0;
+    // planets[0].x += (sin(p.y + iTime) + 1.0)/10.0;
+    // planets[0].y += (sin(p.y + iTime) + 1.0)/10.0;
+    // planets[0].z += (sin(p.y + iTime) + 1.0)/10.0;
+    planets[0].w += (sin(p.y + iTime) + 1.0)/10.0;
+
     float minDist = getLen(p, planets[0]);
     
    	// Floor
