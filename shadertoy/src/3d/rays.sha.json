@@ -10,7 +10,7 @@
       }
     },
     "BufferA": {
-      "path": "buffers/move.glsl",
+      "path": "@/shadertoy/src/buffers/move.glsl",
       "inputs": {
         "iChannel0": {
           "type": "buffer",

@@ -4,17 +4,17 @@
     "Image": {
       "inputs": {
         "iChannel0": {
-          "type": "buffer",
-          "source": "BufferA"
+          "source": "BufferA",
+          "type": "buffer"
         }
       }
     },
     "BufferA": {
-      "path": "buffers/move.glsl",
+      "path": "@/shadertoy/src/buffers/move.glsl",
       "inputs": {
         "iChannel0": {
-          "type": "buffer",
-          "source": "BufferA"
+          "source": "BufferA",
+          "type": "buffer"
         },
         "iChannel1": {
           "type": "keyboard"

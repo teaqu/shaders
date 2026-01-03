@@ -4,13 +4,13 @@
     "Image": {
       "inputs": {
         "iChannel0": {
-          "source": "BufferA",
-          "type": "buffer"
+          "type": "buffer",
+          "source": "BufferA"
         }
       }
     },
     "BufferA": {
-      "path": "./buffers/move.glsl",
+      "path": "shadertoy/src/buffers/move.glsl",
       "inputs": {
         "iChannel0": {
           "source": "BufferA",

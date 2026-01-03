@@ -1,4 +1,4 @@
-#define SPEED 0.01;
+#define SPEED 0.1;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
