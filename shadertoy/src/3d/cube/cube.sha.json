@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "passes": {
+    "Image": {
+      "inputs": {
+        "iChannel0": {
+          "type": "buffer",
+          "source": "BufferA"
+        }
+      }
+    },
+    "BufferA": {
+      "path": "cube_move.glsl",
+      "inputs": {
+        "iChannel0": {
+          "source": "BufferA",
+          "type": "buffer"
+        },
+        "iChannel1": {
+          "type": "keyboard"
+        }
+      }
+    }
+  }
+}
