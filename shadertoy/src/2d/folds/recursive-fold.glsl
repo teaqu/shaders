@@ -19,16 +19,16 @@ mat2 rotate(float a) {
 }
 
 float dTree(vec2 p) {
-    float scale = 0.8;
-    float size = 0.2;
+    float scale = 1.1;
+    float size = 0.1;
     float d = circle(p, size);
-    for (int i = 0; i < 198; i++) {
-        vec2 q = foldX(p);
-        q.y -= size;
+    for (int i = 0; i < 7; i++) {
+        vec2 q = foldX(abs(p));
+        q.y -= size + 0.3;
         q.xy *= rotate(-0.5);
         d = min(d, circle(p, size));
-        p = q;
-        size *= scale;
+        p = abs(q);
+        size *= scale + 0.0;
     }
     return d;
 }
@@ -36,6 +36,7 @@ float dTree(vec2 p) {
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec2 uv = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;
+    uv *= 2.0;
     float tree = step(0.0, dTree(uv * 3.0));
     fragColor = vec4(vec3(tree), 1.0);
 }
